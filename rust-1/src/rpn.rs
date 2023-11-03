@@ -89,8 +89,8 @@ impl Stack {
                 let b = stack.pop()?;
                 match (a, b) {
                     (Item::Int(a), Item::Int(b)) => {
-                        Ok(stack.push(Item::Int(a + b)))
-                        //Ok(())
+                        let _ = stack.push(Item::Int(a + b));
+                        Ok(())
                     }
                     _ => Err(Error::Type),
                 }
@@ -98,19 +98,19 @@ impl Stack {
             Op::Eq => {
                 let a = stack.pop()?;
                 let b = stack.pop()?;
-                Ok(stack.push(Item::Bool(a == b)))
-                //Ok(())
+                let _ = stack.push(Item::Bool(a == b));
+                Ok(())
             }
             Op::Neg => {
                 // if we have a boolean on the stack, negate it
                 // else, return a type error
                 let a = stack.pop()?;
                 if let Item::Bool(a) = a {
-                    Ok(stack.push(Item::Bool(!a)))
+                    let _ = stack.push(Item::Bool(!a));
                 } else {
                     return Err(Error::Type);
                 }
-                //Ok(())
+                Ok(())
             }
             Op::Swap => {
                 let a = stack.pop()?;
@@ -131,8 +131,8 @@ impl Stack {
                         let _ = stack.push(Item::Int(a));
                         //push the random number onto the stack using the rand crate
                         let num = rand::thread_rng().gen_range(0,a);
-                        Ok(stack.push(Item::Int(num)))
-                        //Ok(())
+                        let _ = stack.push(Item::Int(num));
+                        Ok(())
                     }
                     _ => Err(Error::Type),
                 }
@@ -144,11 +144,11 @@ impl Stack {
                 match a {
                     Item::Bool(a) => {
                         if a {
-                            Ok(stack.push(b))
+                            let _ = stack.push(b);
                         } else {
-                            Ok(stack.push(c))
+                            let _ = stack.push(c);
                         }
-                        //Ok(())
+                        Ok(())
                     }
                     _ => Err(Error::Type),
                 }
