@@ -12,7 +12,7 @@
  */
 
 /// Return the list of all prime numbers up to and including n.
-pub fn sieve(n: u32) -> Vec<u32> {
+pub fn sieve(_n: u32) -> Vec<u32> {
     todo!()
 }
 

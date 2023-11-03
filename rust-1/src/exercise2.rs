@@ -26,7 +26,7 @@
 pub type Matrix = Vec<Vec<i32>>;
 
 /// Multiply two matrices and return the result in a new matrix
-pub fn mat_mult(mat1: &Matrix, mat2: &Matrix) -> Matrix {
+pub fn mat_mult(_mat1: &Matrix, _mat2: &Matrix) -> Matrix {
     todo!()
 }
 

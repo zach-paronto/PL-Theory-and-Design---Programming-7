@@ -13,18 +13,18 @@
  */
 
 /// Compute the sum of a vector of integers
-pub fn sum(vs: &Vec<i32>) -> i32 {
+pub fn sum(_vs: &Vec<i32>) -> i32 {
     todo!()
 }
 
 /// Return a copy of the input vector, keeping only the first copy of each element.
-pub fn dedup(vs: &Vec<i32>) -> Vec<i32> {
+pub fn dedup(_vs: &Vec<i32>) -> Vec<i32> {
     todo!()
 }
 
 /// Return a copy of the input vector keeping only elements where the predicate is true. The order
 /// of elements should not be changed.
-pub fn filter(vs: &Vec<i32>, pred: &dyn Fn(i32) -> bool) -> Vec<i32> {
+pub fn filter(_vs: &Vec<i32>, _pred: &dyn Fn(i32) -> bool) -> Vec<i32> {
     todo!()
 }
 

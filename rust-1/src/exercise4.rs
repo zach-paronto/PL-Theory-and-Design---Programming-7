@@ -34,7 +34,7 @@ pub type Move = (Peg, Peg);
  * You may assume that `src`, `aux`, and `dst` are all different.
  * You may want to write some helper functions to avoid repeating lots of code.
  */
-pub fn hanoi(num_discs: u32, src: Peg, aux: Peg, dst: Peg) -> Vec<Move> {
+pub fn hanoi(_num_discs: u32, _src: Peg, _aux: Peg, _dst: Peg) -> Vec<Move> {
     todo!()
 }
 
