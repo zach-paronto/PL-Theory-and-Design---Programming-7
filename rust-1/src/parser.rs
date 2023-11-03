@@ -47,7 +47,26 @@ pub fn evaluate_line(stack: &mut rpn::Stack, buf: &str) -> rpn::Result<()> {
      * https://doc.rust-lang.org/std/primitive.str.html#method.parse
      */
     for tok in tokens {
-        todo!()
+        //first, check if we have an integer or a boolean. if so, push it onto the stack
+        //then check to see which operator we have
+        //if we have an operator, call the eval method on the stack with the corresponding op
+        //if we have a quit, return
+        if let Ok(int) = tok.parse::<i32>() {
+            stack.push(rpn::Item::Int(int))?;
+        } else if let Ok(boolean) = tok.parse::<bool>() {
+            stack.push(rpn::Item::Bool(boolean))?;
+        } else {
+            match tok {
+                "+" => stack.eval(rpn::Op::Add)?,
+                "=" => stack.eval(rpn::Op::Eq)?,
+                "~" => stack.eval(rpn::Op::Neg)?,
+                "<->" => stack.eval(rpn::Op::Swap)?,
+                "#" => stack.eval(rpn::Op::Rand)?,
+                "?" => stack.eval(rpn::Op::Cond)?,
+                "quit" => stack.eval(rpn::Op::Quit)?,
+                _ => return Err(rpn::Error::Syntax),
+            }
+        }
     }
     Ok(())
 }

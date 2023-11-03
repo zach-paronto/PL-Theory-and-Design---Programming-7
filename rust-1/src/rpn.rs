@@ -4,6 +4,7 @@
  */
 
 use std::io;
+use rand::Rng;
 
 // Stacks will work with Items, which either either integers or booleans
 #[derive(Eq, PartialEq, Ord, PartialOrd, Debug)]
@@ -40,28 +41,35 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 // Define a type for Stacks
 #[derive(Debug)]
-pub struct Stack(Vec<Item>);
+pub struct Stack{
+    stack: Vec<Item>
+}
 
 // Implement the following functions on Stacks
 impl Stack {
     // Make a new Stack
     pub fn new() -> Self {
-        todo!()
+        Stack {stack: Vec::new()}
     }
 
     // Check if a Stack is empty
     pub fn empty(&self) -> bool {
-        todo!()
+        self.stack.is_empty()
     }
 
     // Push an item onto a stack (should never error)
     pub fn push(&mut self, item: Item) -> Result<()> {
-        todo!()
+        self.stack.push(item);
+        Ok(())
     }
 
     // Pop an item off the Stack; may result in Empty error
     pub fn pop(&mut self) -> Result<Item> {
-        todo!()
+        if self.empty() {
+            Err(Error::Empty)
+        } else {
+            Ok(self.stack.pop().unwrap())
+        }
     }
 
     /*
@@ -72,6 +80,82 @@ impl Stack {
      * Hint: You'll probably want to use the "question-mark" syntax quite a bit; see `rpn.md`.
      */
     pub fn eval(&mut self, op: Op) -> Result<()> {
-        todo!()
+        //&mut self will refer to a stack object
+        //let stack refer to the self object
+        let stack = self;
+        match op {
+            Op::Add => {
+                let a = stack.pop()?;
+                let b = stack.pop()?;
+                match (a, b) {
+                    (Item::Int(a), Item::Int(b)) => {
+                        stack.push(Item::Int(a + b));
+                        Ok(())
+                    }
+                    _ => Err(Error::Type),
+                }
+            }
+            Op::Eq => {
+                let a = stack.pop()?;
+                let b = stack.pop()?;
+                stack.push(Item::Bool(a == b));
+                Ok(())
+            }
+            Op::Neg => {
+                // if we have a boolean on the stack, negate it
+                // else, return a type error
+                let a = stack.pop()?;
+                if let Item::Bool(a) = a {
+                    stack.push(Item::Bool(!a));
+                } else {
+                    return Err(Error::Type);
+                }
+                Ok(())
+            }
+            Op::Swap => {
+                let a = stack.pop()?;
+                let b = stack.pop()?;
+                stack.push(a);
+                stack.push(b);
+                Ok(())
+
+            }
+            Op::Rand => {
+                // looking at the top element of the stack
+                // if its a bool, return a type error
+                // if its empty, return an empty error
+                // else, gen a rand number between 0 and the top element and push it
+                let a = stack.pop()?;
+                match a {
+                    Item::Int(a) => {
+                        stack.push(Item::Int(a));
+                        //push the random number onto the stack using the rand crate
+                        let num = rand::thread_rng().gen_range(0,a);
+                        stack.push(Item::Int(num));
+                        Ok(())
+                    }
+                    _ => Err(Error::Type),
+                }
+            }
+            Op::Cond => {
+                let a = stack.pop()?;
+                let b = stack.pop()?;
+                let c = stack.pop()?;
+                match a {
+                    Item::Bool(a) => {
+                        if a {
+                            stack.push(b);
+                        } else {
+                            stack.push(c);
+                        }
+                        Ok(())
+                    }
+                    _ => Err(Error::Type),
+                }
+            }
+            Op::Quit => {
+                Err(Error::Quit)
+            }
+        }
     }
 }
