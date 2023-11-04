@@ -98,8 +98,17 @@ impl Stack {
             Op::Eq => {
                 let a = stack.pop()?;
                 let b = stack.pop()?;
-                let _ = stack.push(Item::Bool(a == b));
-                Ok(())
+                match (a, b) {
+                    (Item::Int(a), Item::Int(b)) => {
+                        let _ = stack.push(Item::Bool(a == b));
+                        Ok(())
+                    }
+                    (Item::Bool(a), Item::Bool(b)) => {
+                        let _ = stack.push(Item::Bool(a == b));
+                        Ok(())
+                    }
+                    _ => Err(Error::Type),
+                }
             }
             Op::Neg => {
                 // if we have a boolean on the stack, negate it
@@ -128,7 +137,6 @@ impl Stack {
                 let a = stack.pop()?;
                 match a {
                     Item::Int(a) => {
-                        let _ = stack.push(Item::Int(a));
                         //push the random number onto the stack using the rand crate
                         let num = rand::thread_rng().gen_range(0,a);
                         let _ = stack.push(Item::Int(num));
@@ -141,12 +149,12 @@ impl Stack {
                 let a = stack.pop()?;
                 let b = stack.pop()?;
                 let c = stack.pop()?;
-                match a {
-                    Item::Bool(a) => {
-                        if a {
+                match c {
+                    Item::Bool(c) => {
+                        if c {
                             let _ = stack.push(b);
                         } else {
-                            let _ = stack.push(c);
+                            let _ = stack.push(a);
                         }
                         Ok(())
                     }
